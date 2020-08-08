@@ -1,28 +1,28 @@
 ! ##################################################################################################################################
-! Begin MIT license text.                                                                                    
+! Begin MIT license text.
 ! _______________________________________________________________________________________________________
-                                                                                                         
-! Copyright 2019 Dr William R Case, Jr (dbcase29@gmail.com)                                              
-                                                                                                         
-! Permission is hereby granted, free of charge, to any person obtaining a copy of this software and      
+
+! Copyright 2019 Dr William R Case, Jr (dbcase29@gmail.com)
+
+! Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
 ! associated documentation files (the "Software"), to deal in the Software without restriction, including
 ! without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-! copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to   
-! the following conditions:                                                                              
-                                                                                                         
-! The above copyright notice and this permission notice shall be included in all copies or substantial   
-! portions of the Software and documentation.                                                                              
-                                                                                                         
-! THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS                                
-! OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,                            
-! FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE                            
-! AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER                                 
-! LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,                          
-! OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN                              
-! THE SOFTWARE.                                                                                          
+! copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to
+! the following conditions:
+
+! The above copyright notice and this permission notice shall be included in all copies or substantial
+! portions of the Software and documentation.
+
+! THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+! OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+! FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+! AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+! LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+! OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+! THE SOFTWARE.
 ! _______________________________________________________________________________________________________
-                                                                                                        
-! End MIT license text.                                                                                      
+
+! End MIT license text.
 
 ! MYSTRAN stands for "MY STRuctural ANalysis and is a general purpose finite element analysis program
 !                     -- ---        --
@@ -31,7 +31,7 @@
 ! This is the main program. The major functions are to call the primary subroutines that comprise MYTRAN. The primary subroutines
 ! are LINK0, LINK1, LINK2, LINK3, LINK4, LINK5, LINK6, LINK9:
 
-!  LINK 0: 
+!  LINK 0:
 !     Read input data deck and check for errors and possible restart
 !     Process grid and coordinate system input data
 !     Process Case Control output requests
@@ -40,32 +40,32 @@
 !     Calculates rigid body mass properties (Grid Point Weight Generator)
 !     Process temperature and pressure load input data intp arrays needed for element load calculations
 
-!  LINK 1: 
+!  LINK 1:
 !     Process MPC's and rigid elements into sparse array RMG
 !     Process all applied forces (grid forces and moments, gravity, pressure, thermal, centrifugal, scalar) into sparse array PG)
 !     Formulate the G-set sparse stiffness and mass arrays KGG and MGG
 !     Formulate the G-set sparse differential stiffness array KGGD
 
-!  LINK 2: 
+!  LINK 2:
 !     Reduce the G-set stiffness, mass, load and constraint matrices to the L-set
 
-!  LINK 3 (for statics problems only): 
+!  LINK 3 (for statics problems only):
 !     Solve for the L-set displacements
 
-!  LINK 4 (for eigenvalue problems only): 
+!  LINK 4 (for eigenvalue problems only):
 !     Solve for the L-set eigenvalues and eigenvectors
 
-!  LINK 5: 
+!  LINK 5:
 !     Build the A-set displacements back up to the G-set through use of the constraint matrices
 
-!  LINK 6 (for Craig-Bampton substructure model generation only): 
+!  LINK 6 (for Craig-Bampton substructure model generation only):
 !     Builds a Craig-Bampton model from the input physical model. It is a normal eigenvalue run with SUPORT Bulk Data that defines
 !     a boundary where the model will connect with other models. All of the matrices needed to couple this model to ones connected
-!     at its boundary are calculated along with many output transformation matrices used by Craig-Bampton analysts. 
+!     at its boundary are calculated along with many output transformation matrices used by Craig-Bampton analysts.
 
-!  LINK 9: 
+!  LINK 9:
 !     Use the G-set displacements from LINK5 to solve for the outputs requested in Case Control.
- 
+
 
       USE PENTIUM_II_KIND, ONLY       :  BYTE, LONG, DOUBLE
 
@@ -78,7 +78,7 @@
                                          PROG_NAME, RESTART, SETLEN, SOL_NAME, WARN_ERR
 
       USE TIMDAT, ONLY                :  HOUR, MINUTE, SEC, SFRAC, YEAR, MONTH, DAY, STIME,                                        &
-                                         START_HOUR, START_MINUTE, START_SEC, START_SFRAC, START_YEAR, START_MONTH, START_DAY   
+                                         START_HOUR, START_MINUTE, START_SEC, START_SFRAC, START_YEAR, START_MONTH, START_DAY
 
       USE NONLINEAR_PARAMS, ONLY      :  LOAD_ISTEP, NL_ITER_NUM, NL_MAXITER, NL_NORM, NL_NUM_LOAD_STEPS
 
@@ -100,11 +100,11 @@
 
 
       INTEGER(LONG)                   :: I,J                ! DO loop indices
-      INTEGER(LONG)                   :: I1                 ! Length of file name of LINK1A without the extension 
-      INTEGER(LONG)                   :: ITER_MAX           ! Naximum iterations before quiting 
+      INTEGER(LONG)                   :: I1                 ! Length of file name of LINK1A without the extension
+      INTEGER(LONG)                   :: ITER_MAX           ! Naximum iterations before quiting
       INTEGER(LONG)                   :: NUM_INCL_FILES     ! Number of INCLUDE statements found in the Bulk data file
       INTEGER(LONG)                   :: NUM_LOAD_STEPS     ! Number of steps to divide the load into (1 unless SOL is nonlinear)
-      INTEGER(LONG)                   :: OUNT(2)            ! File units to write messages to 
+      INTEGER(LONG)                   :: OUNT(2)            ! File units to write messages to
 
       REAL(DOUBLE)                    :: CPU_SECS           ! CPU time for job
       REAL(DOUBLE)                    :: EPS1               ! Small number with which to compare to 0
@@ -170,9 +170,10 @@
                                                            ! Open input data file (FEM model) for reading
          CALL FILE_OPEN ( IN1, INFILE, OUNT, 'OLD', IN1_MSG, 'NEITHER', 'FORMATTED', 'READ', 'REWIND', 'N', 'N', 'N' )
 
-         CALL IS_THIS_A_RESTART                            ! Only check if RESTART entry is in E.C. (need for subr MYSTRAN_FILES)
+         ! Only check if RESTART entry is in E.C. (need for subr MYSTRAN_FILES)
+         CALL IS_THIS_A_RESTART
          REWIND (IN1)
-         CALL MYSTRAN_FILES ( START_MONTH, START_DAY, START_YEAR, START_HOUR, START_MINUTE, START_SEC, START_SFRAC )
+         CALL MYSTRAN_FILES(START_MONTH, START_DAY, START_YEAR, START_HOUR, START_MINUTE, START_SEC, START_SFRAC)
                                                            ! Process INCLUDE entries in whole DAT file here to create the IN0 file
          CALL PROCESS_INCLUDE_FILES ( NUM_INCL_FILES )
          IF (NUM_INCL_FILES > 0) THEN
@@ -185,33 +186,33 @@
             REWIND (IN1)
          ENDIF
 
-         CALL LOADE0                                       ! Now perform the other functions of old LOADE0 (F06, etc now open)
+         CALL LOADE0               ! Now perform the other functions of old LOADE0 (F06, etc now open)
 
-         IF (RESTART == 'N') THEN                          ! Normal execution (not a RESTART)
+         IF (RESTART == 'N') THEN  ! Normal execution (not a RESTART)
 
 
-            BUGSTAT_OLD = BUGSTAT                          ! Default value from module IOUNT1
-            ERRSTAT_OLD = ERRSTAT                          ! Default value from module IOUNT1
-            F04STAT_OLD = F04STAT                          ! Default value from module IOUNT1
+            BUGSTAT_OLD = BUGSTAT  ! Default value from module IOUNT1
+            ERRSTAT_OLD = ERRSTAT  ! Default value from module IOUNT1
+            F04STAT_OLD = F04STAT  ! Default value from module IOUNT1
 
-         ELSE                                              ! This is a RESTART
+         ELSE                      ! This is a RESTART
 
             I1 = LEN_RESTART_FNAME
             LINK1A(1:I1)  = RESTART_FILNAM(1:I1)
             LINK1A(I1+1:) = 'L1A'
             CALL READ_L1A ( 'KEEP', 'N' )
 
-            BUGSTAT_OLD = BUGSTAT                          ! Old value from LINK1A
-            ERRSTAT_OLD = ERRSTAT                          ! Old value from LINK1A
-            F04STAT_OLD = F04STAT                          ! Old value from LINK1A
+            BUGSTAT_OLD = BUGSTAT  ! Old value from LINK1A
+            ERRSTAT_OLD = ERRSTAT  ! Old value from LINK1A
+            F04STAT_OLD = F04STAT  ! Old value from LINK1A
 
-            NSUB  = 0                                      ! Initialize items read from L1A that could be changed in the RESTART
+            NSUB  = 0              ! Initialize items read from L1A that could be changed in the RESTART
             NTSUB = 0
 
          ENDIF
 
-         LOAD_ISTEP = 1                                    ! Want 1 in LINK0 - also when the steps: DO loop runs for I=1 below
-         CALL LINK0                                        ! Call LINK's to process input and solve problem.
+         LOAD_ISTEP = 1            ! Want 1 in LINK0 - also when the steps: DO loop runs for I=1 below
+         CALL LINK0                ! Call LINK's to process input and solve problem.
 
       ENDIF
 
@@ -227,12 +228,13 @@
       ENDIF
 
       IF (RESTART == 'N') THEN
-      
+
          IF ((SOL_NAME(1:8) == 'DIFFEREN') .OR. (SOL_NAME(1:8) == 'NLSTATIC')) THEN
             NUM_LOAD_STEPS = NL_NUM_LOAD_STEPS
             ITER_MAX       = NL_MAXITER
          ELSE IF ( SOL_NAME(1:8) == 'BUCKLING') THEN
-            NUM_LOAD_STEPS = 2                             ! 1st "load" step is linear statics, 2nd is buckling eigens 
+            ! 1st "load" step is linear statics, 2nd is buckling eigens
+            NUM_LOAD_STEPS = 2
             ITER_MAX       = 0
          ELSE
             NUM_LOAD_STEPS = 1
@@ -252,11 +254,11 @@ iters:      DO
 
                CALL LINK2
                IF (SOL_NAME(1:8) == 'BUCKLING') THEN
-                  IF (I == 1) THEN                         ! This is the linear static portion of BUCKLING
+                  IF (I == 1) THEN        ! This is the linear static portion of BUCKLING
                      IF (NDOFL > 0) THEN
                         CALL LINK3
-                     ELSE                                  ! This is eigens for BUCKLING
-                        COMM(3) = 'C'                      ! --- Need to do this, otherwise LINK5 will fail
+                     ELSE                 ! This is eigens for BUCKLING
+                        COMM(3) = 'C'     ! --- Need to do this, otherwise LINK5 will fail
                      ENDIF
                   ELSE
                      CALL LINK4
@@ -265,7 +267,7 @@ iters:      DO
                   IF (NDOFL > 0) THEN
                      CALL LINK3
                   ELSE
-                     COMM(3) = 'C'                         ! Need to do this, otherwise LINK5 will fail
+                     COMM(3) = 'C'         ! Need to do this, otherwise LINK5 will fail
                   ENDIF
                ELSE IF ((SOL_NAME(1:5) == 'MODES') .OR. (SOL_NAME(1:12) == 'GEN CB MODEL')) THEN
                   CALL LINK4
@@ -318,7 +320,7 @@ iters:      DO
 
          ENDDO steps
 
-      ELSE                                                 ! This is a restart
+      ELSE  ! This is a restart
 
          IF (RELINK3 == 'Y') THEN
             IF (SOL_NAME(1:7) == 'STATICS') THEN
@@ -333,7 +335,7 @@ iters:      DO
 
       CALL DEALLOCATE_NL_PARAMS
 
-! If any OUTPUT4 matrices have been requested for output, make sure they were all processed
+!     If any OUTPUT4 matrices have been requested for output, make sure they were all processed
 
       DO I=1,NUM_OU4_REQUESTS
          DO J=1,NUM_OU4_VALID_NAMES
@@ -351,7 +353,7 @@ iters:      DO
          ENDDO
       ENDDO
 
-! Set close status for output files
+!     Set close status for output files
 
       IF (BUGOUT == 'Y') THEN
          BUGSTAT = 'KEEP'
@@ -384,7 +386,7 @@ iters:      DO
       ENDIF
 
 
-! Write MYSTRAN END to BUG, ERR, F04, F06 and then close those files
+!     Write MYSTRAN END to BUG, ERR, F04, F06 and then close those files
 
       WRITE(F06,*)
       CALL CPU_TIME ( TIME_END )
@@ -403,13 +405,13 @@ iters:      DO
       ENDIF
 
       write(*,*) ' In MAIN : PCHSTAT = "', pchstat,'"'
-      CALL CLOSE_OUTFILES ( BUGSTAT, ERRSTAT, F04STAT, PCHSTAT )
+      CALL CLOSE_OUTFILES( BUGSTAT, ERRSTAT, F04STAT, PCHSTAT)
 
-! Close LIJ files
+!     Close LIJ files
 
       CALL CLOSE_LIJFILES ( 'FILE_STAT' )
 
-! Write MYSTRAN END and output file name to screen   
+!     Write MYSTRAN END and output file name to screen
 
       WRITE(SC1,151) MONTH,DAY,YEAR,HOUR,MINUTE,SEC,SFRAC
       CALL WRITE_FILNAM ( F06FIL, SC1, 4 )
@@ -465,9 +467,9 @@ iters:      DO
 
 
 ! ##################################################################################################################################
- 
+
       CONTAINS
- 
+
 ! ##################################################################################################################################
 
       SUBROUTINE CALC_CONVERGENCE
@@ -491,7 +493,7 @@ iters:      DO
 !zzzz          PERCENT_CHANGE(LOAD_ISTEP,NL_ITER_NUM) = ONE_HUNDRED                ! Indeterminant but set it to a large number
 !zzzz       ELSE
 !zzzz          PERCENT_CHANGE(LOAD_ISTEP,NL_ITER_NUM) = ZERO
-!zzzz       ENDIF   
+!zzzz       ENDIF
 !zzzz    ENDIF
       ENDIF
 

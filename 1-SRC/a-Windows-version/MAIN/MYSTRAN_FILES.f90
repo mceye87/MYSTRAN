@@ -1,31 +1,31 @@
 ! ##################################################################################################################################
-! Begin MIT license text.                                                                                    
+! Begin MIT license text.
 ! _______________________________________________________________________________________________________
-                                                                                                         
-! Copyright 2019 Dr William R Case, Jr (dbcase29@gmail.com)                                              
-                                                                                                         
-! Permission is hereby granted, free of charge, to any person obtaining a copy of this software and      
+
+! Copyright 2019 Dr William R Case, Jr (dbcase29@gmail.com)
+
+! Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
 ! associated documentation files (the "Software"), to deal in the Software without restriction, including
 ! without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-! copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to   
-! the following conditions:                                                                              
-                                                                                                         
-! The above copyright notice and this permission notice shall be included in all copies or substantial   
-! portions of the Software and documentation.                                                                              
-                                                                                                         
-! THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS                                
-! OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,                            
-! FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE                            
-! AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER                                 
-! LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,                          
-! OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN                              
-! THE SOFTWARE.                                                                                          
+! copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to
+! the following conditions:
+
+! The above copyright notice and this permission notice shall be included in all copies or substantial
+! portions of the Software and documentation.
+
+! THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+! OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+! FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+! AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+! LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+! OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+! THE SOFTWARE.
 ! _______________________________________________________________________________________________________
-                                                                                                        
-! End MIT license text.                                                                                      
- 
+
+! End MIT license text.
+
       SUBROUTINE MYSTRAN_FILES ( START_MONTH, START_DAY, START_YEAR, START_HOUR, START_MINUTE, START_SEC, START_SFRAC)
- 
+
 ! Sets all MYSTRAN file names. Opens all files and closes and deletes them so that no confusion about files if MYSTRAN aborts
 ! Reopen ANS, BUG, ERR, F04, F06
 
@@ -70,7 +70,7 @@
       USE MYSTRAN_FILES_USE_IFs
 
       IMPLICIT NONE
- 
+
       LOGICAL                         :: FILE_EXIST        ! T/F depending on whether a file exists
 
       CHARACTER(LEN=LEN(BLNK_SUB_NAM)):: SUBR_NAME     = 'MYSTRAN_FILES'
@@ -88,14 +88,14 @@
       INTEGER(LONG), INTENT(IN)       :: START_DAY         ! The day      when MYSTRAN started.
       INTEGER(LONG)                   :: I                 ! DO loop index
       INTEGER(LONG)                   :: I1                ! Filename (less extension) length
-      INTEGER(LONG)                   :: OUNT(2)           ! File units to write messages to. Input to subr READERR  
- 
+      INTEGER(LONG)                   :: OUNT(2)           ! File units to write messages to. Input to subr READERR
+
 ! **********************************************************************************************************************************
 ! Default units for writing errors the screen (until LINK1A is read) and set filename length
- 
+
       OUNT(1) = SC1
       OUNT(2) = SC1
- 
+
       IF (RESTART == 'Y') THEN
          I1     = LEN_RESTART_FNAME
          FILNAM = RESTART_FILNAM
@@ -146,6 +146,8 @@
       ENDIF
 
 ! **********************************************************************************************************************************
+!     Open *.F06 file
+
       EINFIL(1:I1)  = FILNAM(1:I1)
       EINFIL(I1+1:) = 'EIN'
 
@@ -179,6 +181,9 @@
          ENDIF
       ENDIF
 
+!------------------------------------------------------------------------------------------------------------------------------------
+!     Open *.INO file
+
       IN0FIL(1:I1)  = FILNAM(1:I1)
       IN0FIL(I1+1:) = 'IN0'
       IF (IN0 /= SC1) THEN
@@ -199,6 +204,8 @@
          ENDIF
       ENDIF
 
+!------------------------------------------------------------------------------------------------------------------------------------
+!     Open *.BUG file
       BUGFIL(1:I1)  = FILNAM(1:I1)
       BUGFIL(I1+1:) = 'BUG'
       IF (BUG /= SC1) THEN
@@ -227,6 +234,8 @@
          ENDIF
       ENDIF
 
+!------------------------------------------------------------------------------------------------------------------------------------
+!     Open ERR file
       ERRFIL(1:I1)  = FILNAM(1:I1)
       ERRFIL(I1+1:) = 'ERR'
       IF (ERR /= SC1) THEN
@@ -255,6 +264,8 @@
          ENDIF
       ENDIF
 
+!------------------------------------------------------------------------------------------------------------------------------------
+!     Open *.ANS file
       ANSFIL(1:I1)  = FILNAM(1:I1)
       ANSFIL(I1+1:) = 'ANS'
       IF (ANS /= SC1) THEN
@@ -278,6 +289,10 @@
          ENDIF
       ENDIF
 
+!------------------------------------------------------------------------------------------------------------------------------------
+!     Open *.OP2 file
+!------------------------------------------------------------------------------------------------------------------------------------
+!     Open *.PCH file
       PCHFIL(1:I1)  = FILNAM(1:I1)
       PCHFIL(I1+1:) = 'PCH'
       IF (PCH /= SC1) THEN
@@ -315,6 +330,8 @@
          WRITE(F04,*)
       ENDIF
 
+!------------------------------------------------------------------------------------------------------------------------------------
+!     Open *.NEU file
       NEUFIL(1:I1)  = FILNAM(1:I1)
       NEUFIL(I1+1:) = 'NEU'
       INQUIRE ( FILE=NEUFIL, EXIST=FILE_EXIST )
@@ -329,6 +346,8 @@
          WRITE(F04,*)
       ENDIF
 
+!------------------------------------------------------------------------------------------------------------------------------------
+!     Open *.SEQ file
       SEQFIL(1:I1)  = FILNAM(1:I1)
       SEQFIL(I1+1:) = 'SEQ'
       INQUIRE ( FILE=SEQFIL, EXIST=FILE_EXIST )
@@ -343,6 +362,8 @@
          WRITE(F04,*)
       ENDIF
 
+!------------------------------------------------------------------------------------------------------------------------------------
+!     Open *.SPC file
       SPCFIL(1:I1)  = FILNAM(1:I1)
       SPCFIL(I1+1:) = 'SPC'
       INQUIRE ( FILE=SPCFIL, EXIST=FILE_EXIST )
@@ -388,7 +409,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       F22FIL(1:I1)  = FILNAM(1:I1)
       F22FIL(I1+1:) = 'F22'
       INQUIRE ( FILE=F22FIL, EXIST=FILE_EXIST )
@@ -402,7 +423,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       F23FIL(1:I1)  = FILNAM(1:I1)
       F23FIL(I1+1:) = 'F23'
       INQUIRE ( FILE=F23FIL, EXIST=FILE_EXIST )
@@ -416,7 +437,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       F24FIL(1:I1)  = FILNAM(1:I1)
       F24FIL(I1+1:) = 'F24'
       INQUIRE ( FILE=F24FIL, EXIST=FILE_EXIST )
@@ -430,7 +451,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       F25FIL(1:I1)  = FILNAM(1:I1)
       F25FIL(I1+1:) = 'F25'
       INQUIRE ( FILE=F25FIL, EXIST=FILE_EXIST )
@@ -444,7 +465,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK1B(1:I1)  = FILNAM(1:I1)
       LINK1B(I1+1:) = 'L1B'
       INQUIRE ( FILE=LINK1B, EXIST=FILE_EXIST )
@@ -472,7 +493,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK1D(1:I1)  = FILNAM(1:I1)
       LINK1D(I1+1:) = 'L1D'
       INQUIRE ( FILE=LINK1D, EXIST=FILE_EXIST )
@@ -486,7 +507,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK1E(1:I1)  = FILNAM(1:I1)
       LINK1E(I1+1:) = 'L1E'
       INQUIRE ( FILE=LINK1E, EXIST=FILE_EXIST )
@@ -500,7 +521,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK1F(1:I1)  = FILNAM(1:I1)
       LINK1F(I1+1:) = 'L1F'
       INQUIRE ( FILE=LINK1F, EXIST=FILE_EXIST )
@@ -514,7 +535,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK1G(1:I1)  = FILNAM(1:I1)
       LINK1G(I1+1:) = 'L1G'
       INQUIRE ( FILE=LINK1G, EXIST=FILE_EXIST )
@@ -528,7 +549,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK1H(1:I1)  = FILNAM(1:I1)
       LINK1H(I1+1:) = 'L1H'
       INQUIRE ( FILE=LINK1H, EXIST=FILE_EXIST )
@@ -542,7 +563,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK1I(1:I1)  = FILNAM(1:I1)
       LINK1I(I1+1:) = 'L1I'
       INQUIRE ( FILE=LINK1I, EXIST=FILE_EXIST )
@@ -556,7 +577,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK1J(1:I1)  = FILNAM(1:I1)
       LINK1J(I1+1:) = 'L1J'
       INQUIRE ( FILE=LINK1J, EXIST=FILE_EXIST )
@@ -570,7 +591,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK1K(1:I1)  = FILNAM(1:I1)
       LINK1K(I1+1:) = 'L1K'
       INQUIRE ( FILE=LINK1K, EXIST=FILE_EXIST )
@@ -584,7 +605,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK1L(1:I1)  = FILNAM(1:I1)
       LINK1L(I1+1:) = 'L1L'
       INQUIRE ( FILE=LINK1L, EXIST=FILE_EXIST )
@@ -598,7 +619,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK1M(1:I1)  = FILNAM(1:I1)
       LINK1M(I1+1:) = 'L1M'
       INQUIRE ( FILE=LINK1M, EXIST=FILE_EXIST )
@@ -612,7 +633,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK1N(1:I1)  = FILNAM(1:I1)
       LINK1N(I1+1:) = 'L1N'
       INQUIRE ( FILE=LINK1N, EXIST=FILE_EXIST )
@@ -626,7 +647,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK1O(1:I1)  = FILNAM(1:I1)
       LINK1O(I1+1:) = 'L1O'
       INQUIRE ( FILE=LINK1O, EXIST=FILE_EXIST )
@@ -640,7 +661,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK1P(1:I1)  = FILNAM(1:I1)
       LINK1P(I1+1:) = 'L1P'
       INQUIRE ( FILE=LINK1P, EXIST=FILE_EXIST )
@@ -654,7 +675,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK1Q(1:I1)  = FILNAM(1:I1)
       LINK1Q(I1+1:) = 'L1Q'
       INQUIRE ( FILE=LINK1Q, EXIST=FILE_EXIST )
@@ -668,7 +689,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK1R(1:I1)  = FILNAM(1:I1)
       LINK1R(I1+1:) = 'L1R'
       INQUIRE ( FILE=LINK1R, EXIST=FILE_EXIST )
@@ -682,7 +703,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK1S(1:I1)  = FILNAM(1:I1)
       LINK1S(I1+1:) = 'L1S'
       INQUIRE ( FILE=LINK1S, EXIST=FILE_EXIST )
@@ -696,7 +717,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK1T(1:I1)  = FILNAM(1:I1)
       LINK1T(I1+1:) = 'L1T'
       INQUIRE ( FILE=LINK1T, EXIST=FILE_EXIST )
@@ -710,7 +731,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK1U(1:I1)  = FILNAM(1:I1)
       LINK1U(I1+1:) = 'L1U'
       INQUIRE ( FILE=LINK1U, EXIST=FILE_EXIST )
@@ -724,7 +745,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK1V(1:I1)  = FILNAM(1:I1)
       LINK1V(I1+1:) = 'L1V'
       INQUIRE ( FILE=LINK1V, EXIST=FILE_EXIST )
@@ -738,7 +759,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK1W(1:I1)  = FILNAM(1:I1)
       LINK1W(I1+1:) = 'L1W'
       INQUIRE ( FILE=LINK1W, EXIST=FILE_EXIST )
@@ -752,7 +773,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK1X(1:I1)  = FILNAM(1:I1)
       LINK1X(I1+1:) = 'L1X'
       INQUIRE ( FILE=LINK1X, EXIST=FILE_EXIST )
@@ -766,7 +787,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK1Y(1:I1)  = FILNAM(1:I1)
       LINK1Y(I1+1:) = 'L1Y'
       INQUIRE ( FILE=LINK1Y, EXIST=FILE_EXIST )
@@ -780,7 +801,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK1Z(1:I1)  = FILNAM(1:I1)
       LINK1Z(I1+1:) = 'L1Z'
       INQUIRE ( FILE=LINK1Z, EXIST=FILE_EXIST )
@@ -794,7 +815,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK2A(1:I1)  = FILNAM(1:I1)
       LINK2A(I1+1:) = 'L2A'
       INQUIRE ( FILE=LINK2A, EXIST=FILE_EXIST )
@@ -808,7 +829,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK2B(1:I1)  = FILNAM(1:I1)
       LINK2B(I1+1:) = 'L2B'
       INQUIRE ( FILE=LINK2B, EXIST=FILE_EXIST )
@@ -822,7 +843,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK2C(1:I1)  = FILNAM(1:I1)
       LINK2C(I1+1:) = 'L2C'
       INQUIRE ( FILE=LINK2C, EXIST=FILE_EXIST )
@@ -836,7 +857,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK2D(1:I1)  = FILNAM(1:I1)
       LINK2D(I1+1:) = 'L2D'
       INQUIRE ( FILE=LINK2D, EXIST=FILE_EXIST )
@@ -850,7 +871,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK2E(1:I1)  = FILNAM(1:I1)
       LINK2E(I1+1:) = 'L2E'
       INQUIRE ( FILE=LINK2E, EXIST=FILE_EXIST )
@@ -864,7 +885,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK2F(1:I1)  = FILNAM(1:I1)
       LINK2F(I1+1:) = 'L2F'
       INQUIRE ( FILE=LINK2F, EXIST=FILE_EXIST )
@@ -878,7 +899,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK2G(1:I1)  = FILNAM(1:I1)
       LINK2G(I1+1:) = 'L2G'
       INQUIRE ( FILE=LINK2G, EXIST=FILE_EXIST )
@@ -892,7 +913,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK2H(1:I1)  = FILNAM(1:I1)
       LINK2H(I1+1:) = 'L2H'
       INQUIRE ( FILE=LINK2H, EXIST=FILE_EXIST )
@@ -906,7 +927,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK2I(1:I1)  = FILNAM(1:I1)
       LINK2I(I1+1:) = 'L2I'
       INQUIRE ( FILE=LINK2I, EXIST=FILE_EXIST )
@@ -920,7 +941,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK2J(1:I1)  = FILNAM(1:I1)
       LINK2J(I1+1:) = 'L2J'
       INQUIRE ( FILE=LINK2J, EXIST=FILE_EXIST )
@@ -934,7 +955,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK2K(1:I1)  = FILNAM(1:I1)
       LINK2K(I1+1:) = 'L2K'
       INQUIRE ( FILE=LINK2K, EXIST=FILE_EXIST )
@@ -948,7 +969,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK2L(1:I1)  = FILNAM(1:I1)
       LINK2L(I1+1:) = 'L2L'
       INQUIRE ( FILE=LINK2L, EXIST=FILE_EXIST )
@@ -962,7 +983,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK2M(1:I1)  = FILNAM(1:I1)
       LINK2M(I1+1:) = 'L2M'
       INQUIRE ( FILE=LINK2M, EXIST=FILE_EXIST )
@@ -976,7 +997,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK2N(1:I1)  = FILNAM(1:I1)
       LINK2N(I1+1:) = 'L2N'
       INQUIRE ( FILE=LINK2N, EXIST=FILE_EXIST )
@@ -1088,7 +1109,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK4A(1:I1)  = FILNAM(1:I1)
       LINK4A(I1+1:) = 'L4A'
       INQUIRE ( FILE=LINK4A, EXIST=FILE_EXIST )
@@ -1102,7 +1123,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK4B(1:I1)  = FILNAM(1:I1)
       LINK4B(I1+1:) = 'L4B'
       INQUIRE ( FILE=LINK4B, EXIST=FILE_EXIST )
@@ -1116,7 +1137,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK4C(1:I1)  = FILNAM(1:I1)
       LINK4C(I1+1:) = 'L4C'
       INQUIRE ( FILE=LINK4C, EXIST=FILE_EXIST )
@@ -1130,7 +1151,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK4D(1:I1)  = FILNAM(1:I1)
       LINK4D(I1+1:) = 'L4D'
       INQUIRE ( FILE=LINK4D, EXIST=FILE_EXIST )
@@ -1144,7 +1165,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK5A(1:I1)  = FILNAM(1:I1)
       LINK5A(I1+1:) = 'L5A'
       INQUIRE ( FILE=LINK5A, EXIST=FILE_EXIST )
@@ -1158,7 +1179,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       LINK5B(1:I1)  = FILNAM(1:I1)
       LINK5B(I1+1:) = 'L5B'
       INQUIRE ( FILE=LINK5B, EXIST=FILE_EXIST )
@@ -1172,7 +1193,7 @@
          ENDIF
          WRITE(F04,*)
       ENDIF
- 
+
       DO I=1,MOU4
          OU4FIL(I)(1:I1)  = FILNAM(1:I1)
          OU4FIL(I)(I1+1:) = OU4_EXT(I)
@@ -1188,7 +1209,7 @@
             WRITE(F04,*)
          ENDIF
       ENDDO
- 
+
 ! **********************************************************************************************************************************
       IF (WRT_LOG >= SUBR_BEGEND) THEN
          CALL OURTIM
