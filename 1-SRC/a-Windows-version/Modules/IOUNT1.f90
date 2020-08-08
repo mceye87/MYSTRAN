@@ -1,32 +1,32 @@
 ! ##################################################################################################################################
-! Begin MIT license text.                                                                                    
+! Begin MIT license text.
 ! _______________________________________________________________________________________________________
-                                                                                                         
-! Copyright 2019 Dr William R Case, Jr (dbcase29@gmail.com)                                              
-                                                                                                         
-! Permission is hereby granted, free of charge, to any person obtaining a copy of this software and      
+
+! Copyright 2019 Dr William R Case, Jr (dbcase29@gmail.com)
+
+! Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
 ! associated documentation files (the "Software"), to deal in the Software without restriction, including
 ! without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-! copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to   
-! the following conditions:                                                                              
-                                                                                                         
-! The above copyright notice and this permission notice shall be included in all copies or substantial   
-! portions of the Software and documentation.                                                                              
-                                                                                                         
-! THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS                                
-! OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,                            
-! FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE                            
-! AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER                                 
-! LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,                          
-! OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN                              
-! THE SOFTWARE.                                                                                          
+! copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to
+! the following conditions:
+
+! The above copyright notice and this permission notice shall be included in all copies or substantial
+! portions of the Software and documentation.
+
+! THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+! OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+! FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+! AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+! LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+! OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+! THE SOFTWARE.
 ! _______________________________________________________________________________________________________
-                                                                                                        
-! End MIT license text.                                                                                      
+
+!     End MIT license text.
 
       MODULE IOUNT1
- 
-! Input/output logical units, file names, status and file description (msg) variables
+
+!     Input/output logical units, file names, status and file description (msg) variables
 
       USE PENTIUM_II_KIND, ONLY       :  BYTE, LONG
       USE SCONTR, ONLY                :  MBUG, MFIJ
@@ -34,8 +34,8 @@
       IMPLICIT NONE
 
       INTEGER(LONG), PARAMETER        :: FILE_NAM_MAXLEN = 256 ! Max length (chars) in any file name (incl folder length & ext)
-      INTEGER(LONG)                   :: LEN_INPUT_FNAME       ! Length of input   dat filename up to and including the decimal pt  
-      INTEGER(LONG)                   :: LEN_RESTART_FNAME     ! Length of restart dat filename up to and including the decimal pt  
+      INTEGER(LONG)                   :: LEN_INPUT_FNAME       ! Length of input   dat filename up to and including the decimal pt
+      INTEGER(LONG)                   :: LEN_RESTART_FNAME     ! Length of restart dat filename up to and including the decimal pt
       INTEGER(LONG), PRIVATE          :: I                     ! Only use is in implied DO loops below to initialize variables
       INTEGER(LONG), ALLOCATABLE      :: IN4FIL_NUM(:)         ! File number in E.C entry IN4
       INTEGER(LONG), PARAMETER        :: MOT4            =  9  ! Number of OT4 files allowable
@@ -45,31 +45,32 @@
       INTEGER(LONG), PARAMETER        :: NUM_OU4_FILES   = 20  ! Number of OU4 files allowable
       INTEGER(LONG), PARAMETER        :: MAX_FIL         = 71  ! Number of files (except OU4, SCR)
 
- 
+
       SAVE
 
       CHARACTER(  1*BYTE)             :: BUGOUT  = 'N'         ! Y/N indicator if anything has been written to BUG file
       CHARACTER(FILE_NAM_MAXLEN*BYTE) :: DEFDIR                ! User inputs dir of where to find input (and to write output) here
       CHARACTER(  3*BYTE)             :: DEF_INFILE_EXT = 'DAT'! Default extension for input file INFILE
 
-! Following are the variable names for all files (except for units SC1, SCR, which do not have file names) used by Program
+!     Following are the variable names for all files (except for units SC1, SCR, which do not have file names) used by Program
 
       CHARACTER(FILE_NAM_MAXLEN*BYTE) :: ANSFIL                ! (filename.ANS) On ly has answers from LINK9
       CHARACTER(FILE_NAM_MAXLEN*BYTE) :: BUGFIL                ! (filename.BUG) Debug file: ELDATA C.C. request elem debug info
       CHARACTER(FILE_NAM_MAXLEN*BYTE) :: EINFIL                ! (filename.EIN) Eigenvector scale factors (used to change signs)
       CHARACTER(FILE_NAM_MAXLEN*BYTE) :: ENFFIL                ! (filename.ENF) Enforced displs - file for DOF's that are enforced
       CHARACTER(FILE_NAM_MAXLEN*BYTE) :: ERRFIL                ! (filename.ERR) Error file: error messages written (and to F06)
-      CHARACTER(FILE_NAM_MAXLEN*BYTE) :: F04FIL                ! (filename.F04) Log file (subroutine begin/end times)    
+      CHARACTER(FILE_NAM_MAXLEN*BYTE) :: F04FIL                ! (filename.F04) Log file (subroutine begin/end times)
       CHARACTER(FILE_NAM_MAXLEN*BYTE) :: F06FIL                ! (filename.F06) Output file
       CHARACTER(FILE_NAM_MAXLEN*BYTE) :: IN0FIL                ! (filename.F06) Input file with all INCLUDE files
-      CHARACTER(FILE_NAM_MAXLEN*BYTE) :: INFILE                ! (filename.DAT) Input file  
-      CHARACTER(FILE_NAM_MAXLEN*BYTE) :: PCHFIL                ! (filename.PCH) Punch output file  
+      CHARACTER(FILE_NAM_MAXLEN*BYTE) :: INFILE                ! (filename.DAT) Input file
+      CHARACTER(FILE_NAM_MAXLEN*BYTE) :: PCHFIL                ! (filename.PCH) Punch output file
+      CHARACTER(FILE_NAM_MAXLEN*BYTE) :: OP2FIL                ! (filename.OP2) Punch output file
       CHARACTER(FILE_NAM_MAXLEN*BYTE),                                                                                             &
                           ALLOCATABLE :: IN4FIL(:)             ! Names of IN4 files containing USERIN matrices
       CHARACTER(FILE_NAM_MAXLEN*BYTE) :: INCFIL                ! Names of B.D. INCLUDE files
       CHARACTER(FILE_NAM_MAXLEN*BYTE) :: INIFIL                ! Program initialization (formatted text) file (program.INI)
       CHARACTER(FILE_NAM_MAXLEN*BYTE) :: LINK1A                ! (filename.L1A) Formatted file , see descr. below
-      CHARACTER(FILE_NAM_MAXLEN*BYTE) :: NEUFIL                ! (filename.NEU) FEMAP neutral file  
+      CHARACTER(FILE_NAM_MAXLEN*BYTE) :: NEUFIL                ! (filename.NEU) FEMAP neutral file
       CHARACTER(FILE_NAM_MAXLEN*BYTE) :: SEQFIL                ! (filename.SEQ) Unformatted file , see descr. below
       CHARACTER(FILE_NAM_MAXLEN*BYTE) :: SPCFIL                ! (filename.SPC) Formatted file , see descr. below
 
@@ -131,91 +132,92 @@
       CHARACTER(FILE_NAM_MAXLEN*BYTE) :: LINK5A                ! (filename.L5A) Unformatted file , see descr. below
       CHARACTER(FILE_NAM_MAXLEN*BYTE) :: LINK5B                ! (filename.L5B) Unformatted file , see descr. below
 
-      CHARACTER(FILE_NAM_MAXLEN*BYTE) :: OU4FIL(MOU4)          ! (filename.OPi) Unformatted file , see descr. below
+      CHARACTER(FILE_NAM_MAXLEN*BYTE) :: OU4FIL(MOU4)          ! (filename.OPi) Unformatted file , see descr. below  (TODO: is this right???)
       CHARACTER(FILE_NAM_MAXLEN*BYTE) :: OT4FIL(MOT4)          ! (filename.OTi) Formatted file   , see descr. below
 
-      CHARACTER(FILE_NAM_MAXLEN*BYTE) :: RESTART_FILNAM        ! Name of file to restart 
+      CHARACTER(FILE_NAM_MAXLEN*BYTE) :: RESTART_FILNAM        ! Name of file to restart
 
-! The following STAT variables are for deciding what to do with the files when they are closed. The user can override the
-! initial values in file Program.INI. Not included are status for file units SC1, SCR. Also, note that several of the file status'
-! are PARAMETER. These are files that the user would not want to be deleted (BUGFIL would want to be kept but only if something
-! has been written to it
-                                        
-      CHARACTER(  8*BYTE)             :: ANSSTAT       = 'DELETE  '  ! close status for file ANSFIL 
-      CHARACTER(  8*BYTE)             :: BUGSTAT       = 'DELETE  '  ! close status for file BUGFIL 
-      CHARACTER(  8*BYTE)             :: EINSTAT       = 'KEEP    '  ! close status for file EINFIL 
-      CHARACTER(  8*BYTE)             :: ENFSTAT       = 'KEEP    '  ! close status for file ENFFIL 
-      CHARACTER(  8*BYTE)             :: ERRSTAT       = 'KEEP    '  ! close status for file ERRFIL 
-      CHARACTER(  8*BYTE)             :: F04STAT       = 'DELETE  '  ! close status for file F06FIL 
-      CHARACTER(  8*BYTE)             :: F06STAT       = 'KEEP    '  ! close status for file F04FIL 
+!     The following STAT variables are for deciding what to do with the files when they are closed. The user can override the
+!     initial values in file Program.INI. Not included are status for file units SC1, SCR. Also, note that several of the file status'
+!     are PARAMETER. These are files that the user would not want to be deleted (BUGFIL would want to be kept but only if something
+!     has been written to it
+
+      CHARACTER(  8*BYTE)             :: ANSSTAT       = 'DELETE  '  ! close status for file ANSFIL
+      CHARACTER(  8*BYTE)             :: BUGSTAT       = 'DELETE  '  ! close status for file BUGFIL
+      CHARACTER(  8*BYTE)             :: EINSTAT       = 'KEEP    '  ! close status for file EINFIL
+      CHARACTER(  8*BYTE)             :: ENFSTAT       = 'KEEP    '  ! close status for file ENFFIL
+      CHARACTER(  8*BYTE)             :: ERRSTAT       = 'KEEP    '  ! close status for file ERRFIL
+      CHARACTER(  8*BYTE)             :: F04STAT       = 'DELETE  '  ! close status for file F06FIL
+      CHARACTER(  8*BYTE)             :: F06STAT       = 'KEEP    '  ! close status for file F04FIL
       CHARACTER(  8*BYTE)             :: IN0STAT       = 'KEEP    '  ! close status for file INFILE plus all INCLUDE files
-      CHARACTER(  8*BYTE)             :: IN1STAT       = 'KEEP    '  ! close status for file INFILE 
-      CHARACTER(  8*BYTE)             :: IN4STAT       = 'KEEP    '  ! close status for file IN4FIL 
-      CHARACTER(  8*BYTE)             :: INCSTAT       = 'KEEP    '  ! close status for file INCFIL 
-      CHARACTER(  8*BYTE)             :: INISTAT       = 'KEEP    '  ! close status for file INIFIL 
-      CHARACTER(  8*BYTE)             :: L1ASTAT       = 'DELETE  '  ! close status for file LINK1A 
-      CHARACTER(  8*BYTE)             :: NEUSTAT       = 'DELETE  '  ! close status for file NEUFIL 
-      CHARACTER(  8*BYTE)             :: PCHSTAT       = 'DELETE  '  ! close status for file PCHFIL 
-      CHARACTER(  8*BYTE)             :: SEQSTAT       = 'DELETE  '  ! close status for file SEQFIL 
-      CHARACTER(  8*BYTE)             :: SPCSTAT       = 'DELETE  '  ! close status for file SPCFIL 
+      CHARACTER(  8*BYTE)             :: IN1STAT       = 'KEEP    '  ! close status for file INFILE
+      CHARACTER(  8*BYTE)             :: IN4STAT       = 'KEEP    '  ! close status for file IN4FIL
+      CHARACTER(  8*BYTE)             :: INCSTAT       = 'KEEP    '  ! close status for file INCFIL
+      CHARACTER(  8*BYTE)             :: INISTAT       = 'KEEP    '  ! close status for file INIFIL
+      CHARACTER(  8*BYTE)             :: L1ASTAT       = 'DELETE  '  ! close status for file LINK1A
+      CHARACTER(  8*BYTE)             :: NEUSTAT       = 'DELETE  '  ! close status for file NEUFIL
+      CHARACTER(  8*BYTE)             :: PCHSTAT       = 'DELETE  '  ! close status for file PCHFIL
+      CHARACTER(  8*BYTE)             :: OP2STAT       = 'DELETE  '  ! close status for file OP2FIL
+      CHARACTER(  8*BYTE)             :: SEQSTAT       = 'DELETE  '  ! close status for file SEQFIL
+      CHARACTER(  8*BYTE)             :: SPCSTAT       = 'DELETE  '  ! close status for file SPCFIL
 
-      CHARACTER(  8*BYTE)             :: F21STAT       = 'DELETE  '  ! close status for file F21FIL 
-      CHARACTER(  8*BYTE)             :: F22STAT       = 'DELETE  '  ! close status for file F22FIL 
-      CHARACTER(  8*BYTE)             :: F23STAT       = 'DELETE  '  ! close status for file F23FIL 
-      CHARACTER(  8*BYTE)             :: F24STAT       = 'DELETE  '  ! close status for file F24FIL 
-      CHARACTER(  8*BYTE)             :: F25STAT       = 'DELETE  '  ! close status for file F25FIL 
-      CHARACTER(  8*BYTE)             :: L1BSTAT       = 'DELETE  '  ! close status for file LINK1B 
-      CHARACTER(  8*BYTE)             :: L1CSTAT       = 'DELETE  '  ! close status for file LINK1C 
-      CHARACTER(  8*BYTE)             :: L1DSTAT       = 'DELETE  '  ! close status for file LINK1D 
-      CHARACTER(  8*BYTE)             :: L1ESTAT       = 'DELETE  '  ! close status for file LINK1E 
-      CHARACTER(  8*BYTE)             :: L1FSTAT       = 'DELETE  '  ! close status for file LINK1F 
-      CHARACTER(  8*BYTE)             :: L1GSTAT       = 'DELETE  '  ! close status for file LINK1G 
-      CHARACTER(  8*BYTE)             :: L1HSTAT       = 'DELETE  '  ! close status for file LINK1H 
-      CHARACTER(  8*BYTE)             :: L1ISTAT       = 'DELETE  '  ! close status for file LINK1I 
-      CHARACTER(  8*BYTE)             :: L1JSTAT       = 'DELETE  '  ! close status for file LINK1J 
-      CHARACTER(  8*BYTE)             :: L1KSTAT       = 'DELETE  '  ! close status for file LINK1K 
-      CHARACTER(  8*BYTE)             :: L1LSTAT       = 'DELETE  '  ! close status for file LINK1L 
-      CHARACTER(  8*BYTE)             :: L1MSTAT       = 'DELETE  '  ! close status for file LINK1M 
-      CHARACTER(  8*BYTE)             :: L1NSTAT       = 'DELETE  '  ! close status for file LINK1N 
-      CHARACTER(  8*BYTE)             :: L1OSTAT       = 'DELETE  '  ! close status for file LINK1O 
+      CHARACTER(  8*BYTE)             :: F21STAT       = 'DELETE  '  ! close status for file F21FIL
+      CHARACTER(  8*BYTE)             :: F22STAT       = 'DELETE  '  ! close status for file F22FIL
+      CHARACTER(  8*BYTE)             :: F23STAT       = 'DELETE  '  ! close status for file F23FIL
+      CHARACTER(  8*BYTE)             :: F24STAT       = 'DELETE  '  ! close status for file F24FIL
+      CHARACTER(  8*BYTE)             :: F25STAT       = 'DELETE  '  ! close status for file F25FIL
+      CHARACTER(  8*BYTE)             :: L1BSTAT       = 'DELETE  '  ! close status for file LINK1B
+      CHARACTER(  8*BYTE)             :: L1CSTAT       = 'DELETE  '  ! close status for file LINK1C
+      CHARACTER(  8*BYTE)             :: L1DSTAT       = 'DELETE  '  ! close status for file LINK1D
+      CHARACTER(  8*BYTE)             :: L1ESTAT       = 'DELETE  '  ! close status for file LINK1E
+      CHARACTER(  8*BYTE)             :: L1FSTAT       = 'DELETE  '  ! close status for file LINK1F
+      CHARACTER(  8*BYTE)             :: L1GSTAT       = 'DELETE  '  ! close status for file LINK1G
+      CHARACTER(  8*BYTE)             :: L1HSTAT       = 'DELETE  '  ! close status for file LINK1H
+      CHARACTER(  8*BYTE)             :: L1ISTAT       = 'DELETE  '  ! close status for file LINK1I
+      CHARACTER(  8*BYTE)             :: L1JSTAT       = 'DELETE  '  ! close status for file LINK1J
+      CHARACTER(  8*BYTE)             :: L1KSTAT       = 'DELETE  '  ! close status for file LINK1K
+      CHARACTER(  8*BYTE)             :: L1LSTAT       = 'DELETE  '  ! close status for file LINK1L
+      CHARACTER(  8*BYTE)             :: L1MSTAT       = 'DELETE  '  ! close status for file LINK1M
+      CHARACTER(  8*BYTE)             :: L1NSTAT       = 'DELETE  '  ! close status for file LINK1N
+      CHARACTER(  8*BYTE)             :: L1OSTAT       = 'DELETE  '  ! close status for file LINK1O
       CHARACTER(  8*BYTE)             :: L1PSTAT       = 'DELETE  '  ! close status for file LINK1P
-      CHARACTER(  8*BYTE)             :: L1QSTAT       = 'DELETE  '  ! close status for file LINK1Q 
-      CHARACTER(  8*BYTE)             :: L1RSTAT       = 'DELETE  '  ! close status for file LINK1R 
-      CHARACTER(  8*BYTE)             :: L1SSTAT       = 'DELETE  '  ! close status for file LINK1S 
-      CHARACTER(  8*BYTE)             :: L1TSTAT       = 'DELETE  '  ! close status for file LINK1T 
-      CHARACTER(  8*BYTE)             :: L1USTAT       = 'DELETE  '  ! close status for file LINK1U 
-      CHARACTER(  8*BYTE)             :: L1VSTAT       = 'DELETE  '  ! close status for file LINK1V 
-      CHARACTER(  8*BYTE)             :: L1WSTAT       = 'DELETE  '  ! close status for file LINK1W 
-      CHARACTER(  8*BYTE)             :: L1XSTAT       = 'DELETE  '  ! close status for file LINK1X 
-      CHARACTER(  8*BYTE)             :: L1YSTAT       = 'DELETE  '  ! close status for file LINK1Y 
-      CHARACTER(  8*BYTE)             :: L1ZSTAT       = 'DELETE  '  ! close status for file LINK1Z 
-      CHARACTER(  8*BYTE)             :: L2ASTAT       = 'DELETE  '  ! close status for file LINK2A 
-      CHARACTER(  8*BYTE)             :: L2BSTAT       = 'DELETE  '  ! close status for file LINK2B 
-      CHARACTER(  8*BYTE)             :: L2CSTAT       = 'DELETE  '  ! close status for file LINK2C 
-      CHARACTER(  8*BYTE)             :: L2DSTAT       = 'DELETE  '  ! close status for file LINK2D 
-      CHARACTER(  8*BYTE)             :: L2ESTAT       = 'DELETE  '  ! close status for file LINK2E 
-      CHARACTER(  8*BYTE)             :: L2FSTAT       = 'DELETE  '  ! close status for file LINK2F 
-      CHARACTER(  8*BYTE)             :: L2GSTAT       = 'DELETE  '  ! close status for file LINK2G 
-      CHARACTER(  8*BYTE)             :: L2HSTAT       = 'DELETE  '  ! close status for file LINK2H 
-      CHARACTER(  8*BYTE)             :: L2ISTAT       = 'DELETE  '  ! close status for file LINK2I 
-      CHARACTER(  8*BYTE)             :: L2JSTAT       = 'DELETE  '  ! close status for file LINK2J 
-      CHARACTER(  8*BYTE)             :: L2KSTAT       = 'DELETE  '  ! close status for file LINK2K 
-      CHARACTER(  8*BYTE)             :: L2LSTAT       = 'DELETE  '  ! close status for file LINK2L 
-      CHARACTER(  8*BYTE)             :: L2MSTAT       = 'DELETE  '  ! close status for file LINK2M 
-      CHARACTER(  8*BYTE)             :: L2NSTAT       = 'DELETE  '  ! close status for file LINK2N 
-      CHARACTER(  8*BYTE)             :: L2OSTAT       = 'DELETE  '  ! close status for file LINK2O 
-      CHARACTER(  8*BYTE)             :: L2PSTAT       = 'DELETE  '  ! close status for file LINK2P 
-      CHARACTER(  8*BYTE)             :: L2QSTAT       = 'DELETE  '  ! close status for file LINK2Q 
-      CHARACTER(  8*BYTE)             :: L2RSTAT       = 'DELETE  '  ! close status for file LINK2R 
-      CHARACTER(  8*BYTE)             :: L2SSTAT       = 'DELETE  '  ! close status for file LINK2S 
-      CHARACTER(  8*BYTE)             :: L2TSTAT       = 'DELETE  '  ! close status for file LINK2T 
-      CHARACTER(  8*BYTE)             :: L3ASTAT       = 'DELETE  '  ! close status for file LINK3A 
-      CHARACTER(  8*BYTE)             :: L4ASTAT       = 'DELETE  '  ! close status for file LINK4A 
-      CHARACTER(  8*BYTE)             :: L4BSTAT       = 'DELETE  '  ! close status for file LINK4B 
-      CHARACTER(  8*BYTE)             :: L4CSTAT       = 'DELETE  '  ! close status for file LINK4C 
-      CHARACTER(  8*BYTE)             :: L4DSTAT       = 'DELETE  '  ! close status for file LINK4D 
-      CHARACTER(  8*BYTE)             :: L5ASTAT       = 'DELETE  '  ! close status for file LINK5A 
-      CHARACTER(  8*BYTE)             :: L5BSTAT       = 'DELETE  '  ! close status for file LINK5B 
+      CHARACTER(  8*BYTE)             :: L1QSTAT       = 'DELETE  '  ! close status for file LINK1Q
+      CHARACTER(  8*BYTE)             :: L1RSTAT       = 'DELETE  '  ! close status for file LINK1R
+      CHARACTER(  8*BYTE)             :: L1SSTAT       = 'DELETE  '  ! close status for file LINK1S
+      CHARACTER(  8*BYTE)             :: L1TSTAT       = 'DELETE  '  ! close status for file LINK1T
+      CHARACTER(  8*BYTE)             :: L1USTAT       = 'DELETE  '  ! close status for file LINK1U
+      CHARACTER(  8*BYTE)             :: L1VSTAT       = 'DELETE  '  ! close status for file LINK1V
+      CHARACTER(  8*BYTE)             :: L1WSTAT       = 'DELETE  '  ! close status for file LINK1W
+      CHARACTER(  8*BYTE)             :: L1XSTAT       = 'DELETE  '  ! close status for file LINK1X
+      CHARACTER(  8*BYTE)             :: L1YSTAT       = 'DELETE  '  ! close status for file LINK1Y
+      CHARACTER(  8*BYTE)             :: L1ZSTAT       = 'DELETE  '  ! close status for file LINK1Z
+      CHARACTER(  8*BYTE)             :: L2ASTAT       = 'DELETE  '  ! close status for file LINK2A
+      CHARACTER(  8*BYTE)             :: L2BSTAT       = 'DELETE  '  ! close status for file LINK2B
+      CHARACTER(  8*BYTE)             :: L2CSTAT       = 'DELETE  '  ! close status for file LINK2C
+      CHARACTER(  8*BYTE)             :: L2DSTAT       = 'DELETE  '  ! close status for file LINK2D
+      CHARACTER(  8*BYTE)             :: L2ESTAT       = 'DELETE  '  ! close status for file LINK2E
+      CHARACTER(  8*BYTE)             :: L2FSTAT       = 'DELETE  '  ! close status for file LINK2F
+      CHARACTER(  8*BYTE)             :: L2GSTAT       = 'DELETE  '  ! close status for file LINK2G
+      CHARACTER(  8*BYTE)             :: L2HSTAT       = 'DELETE  '  ! close status for file LINK2H
+      CHARACTER(  8*BYTE)             :: L2ISTAT       = 'DELETE  '  ! close status for file LINK2I
+      CHARACTER(  8*BYTE)             :: L2JSTAT       = 'DELETE  '  ! close status for file LINK2J
+      CHARACTER(  8*BYTE)             :: L2KSTAT       = 'DELETE  '  ! close status for file LINK2K
+      CHARACTER(  8*BYTE)             :: L2LSTAT       = 'DELETE  '  ! close status for file LINK2L
+      CHARACTER(  8*BYTE)             :: L2MSTAT       = 'DELETE  '  ! close status for file LINK2M
+      CHARACTER(  8*BYTE)             :: L2NSTAT       = 'DELETE  '  ! close status for file LINK2N
+      CHARACTER(  8*BYTE)             :: L2OSTAT       = 'DELETE  '  ! close status for file LINK2O
+      CHARACTER(  8*BYTE)             :: L2PSTAT       = 'DELETE  '  ! close status for file LINK2P
+      CHARACTER(  8*BYTE)             :: L2QSTAT       = 'DELETE  '  ! close status for file LINK2Q
+      CHARACTER(  8*BYTE)             :: L2RSTAT       = 'DELETE  '  ! close status for file LINK2R
+      CHARACTER(  8*BYTE)             :: L2SSTAT       = 'DELETE  '  ! close status for file LINK2S
+      CHARACTER(  8*BYTE)             :: L2TSTAT       = 'DELETE  '  ! close status for file LINK2T
+      CHARACTER(  8*BYTE)             :: L3ASTAT       = 'DELETE  '  ! close status for file LINK3A
+      CHARACTER(  8*BYTE)             :: L4ASTAT       = 'DELETE  '  ! close status for file LINK4A
+      CHARACTER(  8*BYTE)             :: L4BSTAT       = 'DELETE  '  ! close status for file LINK4B
+      CHARACTER(  8*BYTE)             :: L4CSTAT       = 'DELETE  '  ! close status for file LINK4C
+      CHARACTER(  8*BYTE)             :: L4DSTAT       = 'DELETE  '  ! close status for file LINK4D
+      CHARACTER(  8*BYTE)             :: L5ASTAT       = 'DELETE  '  ! close status for file LINK5A
+      CHARACTER(  8*BYTE)             :: L5BSTAT       = 'DELETE  '  ! close status for file LINK5B
 
                                                                      ! close status for file OU4FIL's
       CHARACTER(  8*BYTE)             :: OU4STAT(MOU4) = (/('DELETE', I=1,MOU4)/)
@@ -224,8 +226,9 @@
       CHARACTER(  8*BYTE)             :: BUGSTAT_OLD   = 'DELETE  '  ! close status for file BUGFIL for use in restart
       CHARACTER(  8*BYTE)             :: ERRSTAT_OLD   = 'DELETE  '  ! close status for file ERRFIL for use in restart
       CHARACTER(  8*BYTE)             :: F04STAT_OLD   = 'DELETE  '  ! close status for file F04FIL for use in restart
+      CHARACTER(  8*BYTE)             :: OP2STAT_OLD   = 'DELETE  '  ! close status for file OP2FIL for use in restart (TODO: Do I need this?)
 
-! The following are messages that describe what the files are (no message for SC1)
+!     The following are messages that describe what the files are (no message for SC1)
 
       CHARACTER( 64*BYTE)             :: ANS_MSG       = 'PROBLEM ANSWERS'
       CHARACTER( 64*BYTE)             :: BUG_MSG       = 'ELEMENT DEBUG OUTPUT FILE'
@@ -242,6 +245,7 @@
       CHARACTER( 64*BYTE)             :: L1A_MSG       = 'LINK1A TEXT FILE (I/O UNITS, COUNTERS, ETC)'
       CHARACTER( 64*BYTE)             :: NEU_MSG       = 'FEMAP NEUTRAL FILE'
       CHARACTER( 64*BYTE)             :: PCH_MSG       = 'PUNCH OUTPUT FILE'
+      CHARACTER( 64*BYTE)             :: OP2_MSG       = 'OP2 OUTPUT FILE'
       CHARACTER( 64*BYTE)             :: SEQ_MSG       = 'BANDIT SEQGP CARD IMAGES'
       CHARACTER( 64*BYTE)             :: SPC_MSG       = 'SPC1 TEXT FILE'
 
@@ -334,15 +338,16 @@
       INTEGER(LONG)                   :: F04           =    4 ! Unit no. for log file
       INTEGER(LONG)                   :: F06           =    7 ! Unit no. for output file
       INTEGER(LONG)                   :: IN0           = 1003 ! Unit no. for input file with all INCLUDE files
-      INTEGER(LONG)                   :: IN1           =    8 ! Unit no. for input file 
-      INTEGER(LONG)                   :: IN4           = 1004 ! Unit no. for IN4file 
+      INTEGER(LONG)                   :: IN1           =    8 ! Unit no. for input file
+      INTEGER(LONG)                   :: IN4           = 1004 ! Unit no. for IN4file
       INTEGER(LONG)                   :: INC           = 1005 ! Unit no. for Bulk Data INCLUDE files
       INTEGER(LONG)                   :: INI           =    9 ! Unit no. for MYSTRAN.INI file
       INTEGER(LONG)                   :: L1A           =  101 ! Unit no. for file LINK1A
-      INTEGER(LONG)                   :: NEU           =   10 ! Unit no. for FEMPA neutral file 
-      INTEGER(LONG)                   :: PCH           =   11 ! 
-      INTEGER(LONG)                   :: SEQ           =   12 ! Unit no. for SEQGP card images from BANDIT
-      INTEGER(LONG)                   :: SPC           =   13 ! Unit no. for SPC1 text file
+      INTEGER(LONG)                   :: NEU           =   10 ! Unit no. for FEMAP neutral file
+      INTEGER(LONG)                   :: PCH           =   11 ! Unit no. for PCH file
+      INTEGER(LONG)                   :: OP2           =   12 ! Unit no. for OP2 (this is 12 in MSC/NX NASTRAN)
+      INTEGER(LONG)                   :: SEQ           =   13 ! Unit no. for SEQGP card images from BANDIT
+      INTEGER(LONG)                   :: SPC           =   14 ! Unit no. for SPC1 text file
 
       INTEGER(LONG)                   :: F21           =   91 ! Unit no. for file F21FIL
       INTEGER(LONG)                   :: F22           =   92 ! Unit no. for file F22FIL
@@ -413,7 +418,7 @@
       INTEGER(LONG)                   :: OU4_ELM_OTM   = 28 ! OU4 unit above reserved for elem related CB OTM values
       INTEGER(LONG)                   :: OU4_GRD_OTM   = 29 ! OU4 unit above reserved for grid related CB OTM values
 
-! The following are indicators of whether to write to BUG, ERR, F04
+!     The following are indicators of whether to write to BUG, ERR, F04
 
       INTEGER(LONG)                   :: WRT_BUG(0:MBUG-1)  = (/(0, I=0,MBUG-1)/)
                                                                ! WRT_BUG specifies what to write to the BUG file. Set by C.C. ELDATA
@@ -444,25 +449,27 @@
 
 ! F06FIL is a formatted file containing the normal output from MYSTRAN
 
+! OP2FIL is a formatted file containing the binary output from MYSTRAN
+
 ! F21FIL is an unformatted file containing:
-!      Array ME (element mass) for elements requested in ELDATA Case Control command 
-!      See module MODEL_STUF for description. Written by subr WEOFIL (called by subr's ELEM_MASS & EPTL in LINK1)  
+!      Array ME (element mass) for elements requested in ELDATA Case Control command
+!      See module MODEL_STUF for description. Written by subr WEOFIL (called by subr's ELEM_MASS & EPTL in LINK1)
 
 ! F22FIL is an unformatted file containing:
-!      ArrayS PTE, PPE (element thermal & pressure loads) for elements requested in ELDATA Case Control command 
-!      See module MODEL_STUF for description. Written by subr WEOFIL (called by subr's ELEM_MASS & EPTL in LINK1)  
+!      ArrayS PTE, PPE (element thermal & pressure loads) for elements requested in ELDATA Case Control command
+!      See module MODEL_STUF for description. Written by subr WEOFIL (called by subr's ELEM_MASS & EPTL in LINK1)
 
 ! F23FIL is an unformatted file containing:
-!      Array KE (element stiffness) for elements requested in ELDATA Case Control command  
-!      See module MODEL_STUF for description. Written by subr WEOFIL (called by subr ESP in LINK1)  
+!      Array KE (element stiffness) for elements requested in ELDATA Case Control command
+!      See module MODEL_STUF for description. Written by subr WEOFIL (called by subr ESP in LINK1)
 
 ! F24FIL is an unformatted file containing:
 !      Arrays SE1, SE2, SE3, STE1, STE2, STE3 (elem stress recovery matrices) for elems requested in ELDATA Case Control command
-!      See module MODEL_STUF for description. Written by subr WEOFIL (called by subr ESP in LINK1)  
+!      See module MODEL_STUF for description. Written by subr WEOFIL (called by subr ESP in LINK1)
 
 ! F25FIL is an unformatted file containing:
 !      Arrays UEL, PEL (elem displ's and nodal loads) for elements requested in ELDATA Case Control command
-!      See module MODEL_STUF for description. Written by subr WEOFIL (called by subr OFP3 in LINK9)  
+!      See module MODEL_STUF for description. Written by subr WEOFIL (called by subr OFP3 in LINK9)
 
 ! INFILE is a formatted file containing the normal input
 
@@ -514,10 +521,10 @@
 !    After the B.D. deck is read, L1F contains 2 records for each rigid element:
 !    The 1st record is the element type ('RBAR    ', 'RBE1    ', or 'RBE2    ')
 !    The 2nd record contains the rigid element ID and all other element data (see subr's BD_RBAR, BD_RBE1, BD_RBE2)
-!     
+!
 
 ! LINK1G is an unformatted file containing:
-!    Element data:                               See module MODEL_STUF  for description. Written in subr ELSAVE 
+!    Element data:                               See module MODEL_STUF  for description. Written in subr ELSAVE
 !      Arrays ETYPE, EPNT, ESORT1, ESORT2, EOFF
 !      Array  EDAT
 !      Elem integration order and thick plate constants (MIN3, MIN4)
@@ -569,10 +576,10 @@
 !      After the B.D. deck is read, LINK1N has ASET, ASET1, OMIT, OMIT1 information (DOF, GRID range, A/O set)
 
 ! LINK1O is an unformatted file containing SPC, SPC1 data. This file is read in subr DOF_PROC:
-!      After the B.D. deck is read, LINK1O has Set ID, DOF, GRID no., enforced displ (0. or value) 
+!      After the B.D. deck is read, LINK1O has Set ID, DOF, GRID no., enforced displ (0. or value)
 
 ! LINK1P is an unformatted file containing gravity load data that is read in subr GRAV_PROC:
-!      After the B.D. deck is read, LINK1P has: 
+!      After the B.D. deck is read, LINK1P has:
 !               SETID         = Load set ID
 !               ACID_L        = Local coord sys ID that gravity load is given in
 !               GRAV_GRID     = ID of grid that rotational (components 4, 5, 6) grav accels are about
@@ -596,7 +603,7 @@
 !      After the B.D. deck is read, LINK1T has grid, component values for SUPORT'd DOF (one pair/record):
 
 ! LINK1U is an unformatted file containing RFORCE load data that is read in subr RFORCE_PROC:
-!      After the B.D. deck is read, LINK1P has: 
+!      After the B.D. deck is read, LINK1P has:
 !               SETID         = Load set ID
 !               ACID_L        = Local coord sys ID that RFORCE load is given in
 !               GID           = ID of grid that the angular velocity and/or angular accel is about
@@ -618,7 +625,7 @@
 
 ! LINK1Y is an unformatted file containing concentrated and scalar mass data
 !      After subr CONM2_PROC_1 has run, LINK1Y has:
-!         
+!
 
 ! LINK1Z is an unformatted file containing CHKPNT data:
 !      After the C.C deck is read, LINK1Z has the following records
@@ -627,11 +634,11 @@
 !         SPCSET
 !         SUBLOD(I,1), SUBLOD(I,2) one record for each I=1,NSUB
 
-! LINK2A is an unformatted file containing the GMN constraint matrix. Written in LINK2.   
+! LINK2A is an unformatted file containing the GMN constraint matrix. Written in LINK2.
 
 ! LINK2B is an unformatted file containing the KSF stiffness matrix partition.
 
-! LINK2C is an unformatted file containing the QSYS equivalent loads due to enforced displ's. QSYS = KFS(transpose) x YS 
+! LINK2C is an unformatted file containing the QSYS equivalent loads due to enforced displ's. QSYS = KFS(transpose) x YS
 
 ! LINK2D is an unformatted file containing the PS loads on SPC'd-DOf's
 

@@ -1,28 +1,28 @@
 ! ##################################################################################################################################
-! Begin MIT license text.                                                                                    
+! Begin MIT license text.
 ! _______________________________________________________________________________________________________
-                                                                                                         
-! Copyright 2019 Dr William R Case, Jr (dbcase29@gmail.com)                                              
-                                                                                                         
-! Permission is hereby granted, free of charge, to any person obtaining a copy of this software and      
+
+! Copyright 2019 Dr William R Case, Jr (dbcase29@gmail.com)
+
+! Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
 ! associated documentation files (the "Software"), to deal in the Software without restriction, including
 ! without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-! copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to   
-! the following conditions:                                                                              
-                                                                                                         
-! The above copyright notice and this permission notice shall be included in all copies or substantial   
-! portions of the Software and documentation.                                                                              
-                                                                                                         
-! THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS                                
-! OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,                            
-! FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE                            
-! AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER                                 
-! LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,                          
-! OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN                              
-! THE SOFTWARE.                                                                                          
+! copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to
+! the following conditions:
+
+! The above copyright notice and this permission notice shall be included in all copies or substantial
+! portions of the Software and documentation.
+
+! THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+! OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+! FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+! AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+! LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+! OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+! THE SOFTWARE.
 ! _______________________________________________________________________________________________________
-                                                                                                        
-! End MIT license text.                                                                                      
+
+! End MIT license text.
 
       SUBROUTINE READ_INPUT_FILE_NAME ( INI_EXIST )
 
@@ -50,8 +50,8 @@
 
       CHARACTER( 1*BYTE), INTENT(IN)  :: INI_EXIST         ! 'Y' if file MYSTRAN.INI exists or 'N' otherwise
       CHARACTER( 1*BYTE)              :: CEXT              ! = 'Y' if there is an extension following a decimal point in FILNAM
-      CHARACTER(LEN=LEN(INFILE))      :: FILNAM            ! File name 
-      CHARACTER(LEN=LEN(INFILE))      :: DUMFIL            ! File name 
+      CHARACTER(LEN=LEN(INFILE))      :: FILNAM            ! File name
+      CHARACTER(LEN=LEN(INFILE))      :: DUMFIL            ! File name
       CHARACTER( 1*BYTE)              :: POINT             ! = 'Y' if we find a decimal point in INFILE (FILNAM)
 
       INTEGER(LONG)                   :: LEXT              ! Length (chars) of input file extension
@@ -89,7 +89,7 @@
          ENDIF
          NC_TOT = NC_DIR                                   ! This is length of DEFDIR including '\' (if needed)
 
-      ENDIF   
+      ENDIF
 
       NC_FILNAM = 0
       FILNAM(1:) = ' '
@@ -116,18 +116,18 @@ outer:DO                                                   ! Loop which sets fil
          ENDIF
          INFILE(NC_TOT+1:) = FILNAM(1:)
          NC_TOT = NC_TOT + NC_FILNAM
-  
+
          CEXT  = 'N'                                       ! If a file extension was not included, add '.DAT'
          POINT = 'N'
 inner_1: DO I=NC_TOT,1,-1
             IF (INFILE(I:I) == ' ') THEN
                CYCLE inner_1
-            ELSE IF (INFILE(I:I) == '.') THEN              ! '.' indicates there is an extension if non white space after it      
+            ELSE IF (INFILE(I:I) == '.') THEN              ! '.' indicates there is an extension if non white space after it
                POINT = 'Y'
                IF (INFILE(I+1:I+1) == ' ') THEN            ! Check if whote space or not after '.'
                   CEXT  = 'N'                              ! All white space after '.', so no file ext. is in INFILE at this point
                ELSE
-                  CEXT = 'Y'                               ! Non-white space after '.', so file extension is in INFILE 
+                  CEXT = 'Y'                               ! Non-white space after '.', so file extension is in INFILE
                   EXIT inner_1
                ENDIF
             ENDIF
@@ -144,7 +144,7 @@ inner_1: DO I=NC_TOT,1,-1
                ELSE IF (POINT == 'N') THEN
                   INFILE(NC_TOT+1:) = '.' // DEF_INFILE_EXT
                   NC_TOT = NC_TOT + 4
-               ENDIF 
+               ENDIF
             ENDIF
          ENDIF
 
@@ -160,7 +160,7 @@ inner_2: DO
                      INFILE(1:) = DUMFIL(1:)
                      EXIT outer
                   ENDIF
-               ENDIF 
+               ENDIF
                WRITE(SC1,1004)
                CALL WRITE_FILNAM ( INFILE, SC1, 1 )
                WRITE(SC1,1005)
@@ -173,7 +173,7 @@ inner_2: DO
 
       ENDDO outer
 
-! Count length of extension of INFILE (after '.'). File name must have an extension length of at least 1 character. 
+! Count length of extension of INFILE (after '.'). File name must have an extension length of at least 1 character.
 
       LEXT = 0
       DO I=NC_TOT,1,-1
@@ -198,5 +198,65 @@ inner_2: DO
  1006 FORMAT(' Input the input data file name:')
 
 ! **********************************************************************************************************************************
+      END
 
-      END SUBROUTINE READ_INPUT_FILE_NAME
+! ====================================================================================================================================
+! we're just going to stick this here for now
+! we hit the file cap if we add another file....
+!
+! added by Steve Doyle
+
+      SUBROUTINE WRITE_OP2_HEADER()
+!     Creates the OP2 header
+!     Inputs
+!     ------
+!     OP2 : int
+!       the OP2 file number
+!
+!     load the variable sizes
+      USE PENTIUM_II_KIND, ONLY       :  BYTE, LONG
+
+!     load the file number
+      USE IOUNT1, ONLY                : OP2
+
+!     POST_FLAG : int
+!         the PARAM,POST flag
+!         -1 : PARAM,POST,-1 -> not tested
+!         -2 : PARAM,POST,-2 -> not tested (current dev version)
+      INTEGER(LONG)   :: POST = -2
+
+!     NASTRAN VERSION : str
+!         XXXXXXX means Nastran. It's not a placeholder.
+      CHARACTER(8*BYTE)  :: VERSION   = 'XXXXXXXX'
+      CHARACTER(28*BYTE) :: TAPE_CODE = 'NASTRAN FORT TAPE ID CODE - '
+
+!     Writes [4, 3, 4]
+      WRITE(OP2,*) 3
+
+      IF(POST.EQ.-1) THEN
+!       [4, 1, 4,
+!        4, 7, 4,
+!        28, tape_code, 28]
+!       not tested...
+        WRITE(OP2,*) 1, 7, TAPE_CODE
+
+!       [4, 2, 4,
+!       8, nastran_version, 8]))
+        WRITE(OP2,*) 2, VERSION
+
+!       [4, -1, 4]
+!       [4, 0, 4]
+        WRITE(OP2,*) -1, 0
+      ELSE
+!       POST = -2
+!        [4, 2, 4,
+!         4, 4, 4])
+!       not tested...
+        WRITE(OP2,*) 2, 4
+      ENDIF
+      END
+
+      RETURN
+      END
+
+! ====================================================================================================================================
